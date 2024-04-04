@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<beans xmlns="http://www.springframework.org/schema/beans" 
+ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+ xmlns:context="http://www.springframework.org/schema/context" 
+ xmlns:mvc="http://www.springframework.org/schema/mvc" 
+ xsi:schemaLocation=" 
+ http://www.springframework.org/schema/beans 
+ http://www.springframework.org/schema/beans/spring-beans.xsd 
+ http://www.springframework.org/schema/context 
+ http://www.springframework.org/schema/context/spring-context.xsd 
+ http://www.springframework.org/schema/mvc 
+ http://www.springframework.org/schema/mvc/spring-mvc.xsd"> 
+<context:component-scan base-package="com.java.controllers"></context:component-scan> 
+
+ <mvc:default-servlet-handler/>
+ 
+ <!--Provide support for conversion, formatting and validation --> 
+ <mvc:annotation-driven/> 
+ 
+ <bean id="viewResolver1" class="org.springframework.web.servlet.view.ResourceBundleViewResolver">
+        <property name="order" value="1"/>
+        <property name="basename" value="views"/>
+    </bean>
+
+<bean id="viewResolver2" class="org.springframework.web.servlet.view.InternalResourceViewResolver"> 
+<property name="order" value="2"/>
+<property name="prefix" value="/WEB-INF/view/"></property> 
+<property name="suffix" value=".jsp"></property> 
+</bean>  
+ 
+<bean id="ds" class="org.springframework.jdbc.datasource.DriverManagerDataSource"> 
+<property name="driverClassName" value="com.mysql.cj.jdbc.Driver"></property> 
+<property name="url" value="jdbc:mysql://localhost:3306/resident_management_system"></property> 
+<property name="username" value="root"></property> 
+<property name="password" value="root"></property> 
+</bean> 
+ 
+<bean id="jt" class="org.springframework.jdbc.core.JdbcTemplate"> 
+<property name="dataSource" ref="ds"></property> 
+</bean> 
+ 
+<bean id="dao1" class="com.java.dao.ResidentDAO"> 
+<property name="template" ref="jt"></property> 
+</bean>
+
+<bean id="dao2" class="com.java.dao.WardASDAO"> 
+<property name="template" ref="jt"></property> 
+</bean>
+
+<bean id="dao3" class="com.java.dao.GASDAO"> 
+<property name="template" ref="jt"></property> 
+</bean>
+
+<bean id="dao4" class="com.java.dao.PoliceOfficerDAO"> 
+<property name="template" ref="jt"></property> 
+</bean>
+
+<bean id="dao5" class="com.java.dao.SAdminDAO"> 
+<property name="template" ref="jt"></property> 
+</bean>
+
+<bean id="dao6" class="com.java.dao.AdminDAO"> 
+<property name="template" ref="jt"></property> 
+</bean>
+
+<bean id="dao7" class="com.java.dao.WardOrVillageDAO"> 
+<property name="template" ref="jt"></property> 
+</bean>
+
+<bean id="dao8" class="com.java.dao.CrimeDAO"> 
+<property name="template" ref="jt"></property> 
+</bean>
+
+<bean id="dao9" class="com.java.dao.BirthDAO"> 
+<property name="template" ref="jt"></property> 
+</bean>
+
+<bean id="dao10" class="com.java.dao.DeathDAO"> 
+<property name="template" ref="jt"></property> 
+</bean>
+
+<bean id="dao11" class="com.java.dao.StateOrRegionDAO"> 
+<property name="template" ref="jt"></property> 
+</bean>
+
+<bean id="dao12" class="com.java.dao.TownshipDAO"> 
+<property name="template" ref="jt"></property> 
+</bean>
+
+<bean id="dao13" class="com.java.dao.HistoryDAO"> 
+<property name="template" ref="jt"></property> 
+</bean>
+
+<bean id="dao14" class="com.java.dao.SenderDAO"> 
+<property name="template" ref="jt"></property> 
+</bean>
+
+<bean id="dao15" class="com.java.dao.ReceiverDAO"> 
+<property name="template" ref="jt"></property> 
+</bean>
+
+<bean id="state" class="com.java.beans.StateOrRegion"/>
+
+<bean id="township" class="com.java.beans.Township">
+	<property name="stateOrRegion" ref="state"></property>
+</bean>
+
+<bean id="gas" class="com.java.beans.GAS">
+	<property name="township" ref="township"></property>
+</bean>
+
+<bean id="ward" class="com.java.beans.WardOrVillage">
+	<property name="township" ref="township"></property>
+</bean>
+
+<bean id="wardas" class="com.java.beans.WardAS">
+<property name="wardOrVillage" ref="ward"></property>
+</bean>
+
+<bean id="resident" class="com.java.beans.Resident">
+	<property name="wardOrVillage" ref="ward"></property>
+	<property name="wardAS" ref="wardas"></property>
+</bean>
+ 
+ <bean class="com.java.beans.Birth">
+	<property name="wardOrVillage" ref="ward"></property>
+</bean>
+
+<bean class="com.java.beans.Death">
+	<property name="resident" ref="resident"></property>
+</bean>
+
+<bean id="policeOfficer" class="com.java.beans.PoliceOfficer"/>
+
+<bean class="com.java.beans.Crime">
+	<property name="resident" ref="resident"></property>
+</bean>
+
+<bean id="sender" class="com.java.beans.Sender">
+	<property name="wardAS" ref="wardas"></property>
+</bean>
+
+<bean id="receiver" class="com.java.beans.Receiver">
+	<property name="wardAS" ref="wardas"></property>
+</bean>
+
+</beans>
